@@ -1,0 +1,22 @@
+body {
+    background: radial-gradient(circle, white 8%, black 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.img-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#interruptor {
+    width: 100px;
+}
+
+.container {
+    cursor: pointer;
+}
