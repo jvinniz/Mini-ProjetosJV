@@ -1,127 +1,28 @@
-// Calculadora - Atividade 3
+const input = document.getElementById("taskInput")
+const btn = document.getElementById("addTaskBtn")
+const list = document.getElementById("taskList")
 
-var expressao = "";
-var display = document.getElementById("display");
+btn.addEventListener("click", () => {
 
-var COR_NORMAL = "linear-gradient(gray, black)";
-var COR_DESTAQUE = "linear-gradient(gray, red)";
-
-// ---------- Funções da calculadora ----------
-
-function pressed(valor) {
-    expressao = expressao + valor;
-    display.innerHTML = expressao;
-}
-
-function clearAll() {
-    expressao = "";
-    display.innerHTML = "";
-}
-
-function backspace() {
-    expressao = expressao.slice(0, -1);
-    display.innerHTML = expressao;
-}
-
-function calculate() {
-    if (expressao == "") {
-        return;
-    }
-    try {
-        var resultado = eval(expressao);
-        expressao = String(resultado);
-        display.innerHTML = expressao;
-    } catch (erro) {
-        expressao = "";
-        display.innerHTML = "Erro";
-    }
-}
-
-// ---------- Efeito visual ----------
-
-function acender(botao) {
-    botao.style.backgroundImage = COR_DESTAQUE;
-}
-
-function apagar(botao) {
-    botao.style.backgroundImage = COR_NORMAL;
-}
-
-function apagarTodos() {
-    var botoes = document.querySelectorAll(".btn");
-    for (var i = 0; i < botoes.length; i++) {
-        apagar(botoes[i]);
-    }
-}
-
-// Procura o botão pelo texto que está escrito nele
-function acharBotao(texto) {
-    var botoes = document.querySelectorAll(".btn");
-    for (var i = 0; i < botoes.length; i++) {
-        if (botoes[i].textContent == texto) {
-            return botoes[i];
-        }
-    }
-    return null;
-}
-
-// ---------- Mouse ----------
-
-var botoes = document.querySelectorAll(".btn");
-for (var i = 0; i < botoes.length; i++) {
-    botoes[i].addEventListener("mousedown", function () {
-        acender(this);
-    });
-    botoes[i].addEventListener("mouseup", function () {
-        apagar(this);
-    });
-    botoes[i].addEventListener("mouseleave", function () {
-        apagar(this);
-    });
-}
-
-// ---------- Teclado ----------
-
-// Converte a tecla pressionada no texto do botão correspondente
-function textoDaTecla(tecla) {
-    if (tecla == "Backspace") return "<";
-    if (tecla == "Enter") return "=";
-    if (tecla == "Escape") return "C";
-    return tecla;
-}
-
-document.addEventListener("keydown", function (evento) {
-    var texto = textoDaTecla(evento.key);
-    var botao = acharBotao(texto);
-
-    if (botao == null) {
-        return; // tecla que não é da calculadora
+    if (input.value.trim() === "") {
+        alert("Digite uma tarefa")
+        return
     }
 
-    evento.preventDefault(); // evita que o Enter clique no botão focado
-    if (evento.repeat) {
-        return; // ignora tecla segurada
-    }
+    const newTask = document.createElement("li")
+    newTask.textContent = input.value
 
-    acender(botao);
+    const btnDel = document.createElement("button")
+    btnDel.textContent = "x"
+    btnDel.classList.add("btnDel")
 
-    if (texto == "<") {
-        backspace();
-    } else if (texto == "=") {
-        calculate();
-    } else if (texto == "C") {
-        clearAll();
-    } else {
-        pressed(texto);
-    }
-});
+    btnDel.addEventListener("click", () => {
+        newTask.remove()
+    })
 
-document.addEventListener("keyup", function (evento) {
-    var botao = acharBotao(textoDaTecla(evento.key));
-    if (botao != null) {
-        apagar(botao);
-    }
-});
+    newTask.appendChild(btnDel)
 
-// Se a janela perder o foco com uma tecla segurada, apaga tudo
-window.addEventListener("blur", apagarTodos);
+    list.appendChild(newTask)
+
+    input.value = ""
+})
